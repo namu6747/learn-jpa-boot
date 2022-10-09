@@ -10,10 +10,11 @@ spring:
       ddl-auto: create # app 실행 시점에 가진 table(entity)를 지우고 다시 생성
     properties:
       hibernate:
-        show_sql: true # logger를 통해서 찍어야지
+#        show_sql: true # logger를 통해서 찍어야지
         format_sql: true
+        default_batch_fetch_size: 1000
 
 logging:
   level:
     org.hibernate.SQL: debug
-    # org.hibernate.type: trace
+#     org.hibernate.type: trace
