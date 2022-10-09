@@ -1,0 +1,23 @@
+spring:
+  # 아무 것도 없으면 메모리모드로 돌려버린다..
+#  datasource:
+#    url: jdbc:h2:mem:test # JVM 메모리 모드로 테스트
+#    username: sa
+#    password:
+#      driver-class-name: org.h2.Driver
+
+#  jpa:
+#    hibernate:
+#      ddl-auto: create # app 실행 시점에 가진 table(entity)를 지우고 다시 생성
+#    properties:
+#      hibernate:
+#        show_sql: true // logger를 통해서 찍어야지
+#        format_sql: true
+# 극
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
+    
+    #극단적으로 이야기하면 다 없어도 된다
+    #본래 당연히 Test는 다른 db로 돌리는 게 맞다
