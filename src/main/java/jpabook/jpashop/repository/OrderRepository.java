@@ -1,6 +1,8 @@
 package jpabook.jpashop.repository;
 
-import jpabook.jpashop.domain.Member;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jpabook.jpashop.domain.*;
 import jpabook.jpashop.domain.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -26,9 +28,40 @@ public class OrderRepository {
         return em.find(Order.class, id);
     }
 
-    public List<Order> findAll(){
-        return em.createQuery("select o from Order o").getResultList();
+//    public List<Order> findAll(){
+//        return em.createQuery("select o from Order o").getResultList();
+//    }
+
+    public List<Order> findAll(OrderSearch orderSearch){
+
+        QOrder order = QOrder.order;
+        QMember member = QMember.member;
+
+        JPAQueryFactory query = new JPAQueryFactory(em);
+
+        return query.select(order)
+                .from(order)
+                .join(order.member, member)
+                .where(statusEq(orderSearch.getOrderStatus()),
+                        nameLike(orderSearch.getMemberName()))
+                .limit(1000)
+                .fetch();
     }
+
+    private BooleanExpression statusEq(OrderStatus statusCond){
+        if(statusCond == null){
+            return null;
+        }
+        return QOrder.order.status.eq(statusCond);
+    }
+
+    private BooleanExpression nameLike(String nameCond){
+        if(!StringUtils.hasText(nameCond)){
+            return null;
+        }
+        return QMember.member.name.like(nameCond);
+    }
+
 
     public List<Order> findAllWithMemberDelivery(){
         return em.createQuery(
